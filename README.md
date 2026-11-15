@@ -1,40 +1,42 @@
-# DOMANDO RUSH Ver.2.0 — COLOR QUEST
+# DOMANDO RUSH Ver.3.0 — COLOR STORM
 
-カラフルな一人用2Dアクションゲーム。未来風のデザインとオンライン協力機能を廃止し、3エリア、3ボス、敵4種類、レベルアップ強化9種、スコア保存、スマホ用ジョイスティック、効果音を搭載。
+新しいオリジナルソロアクションゲーム。Ver.2.0 の GitHub + Render 構成をそのまま使えます。
 
-## Windowsで実行
+## このバージョンで追加したもの
+
+- **ホーム**：モード選択、チャレンジ、獲得コイン・プレイヤーランク
+- **4つのゲームモード**：カラーストーリー（3ボス）、ぬりぬりバトル（180マスを塗る）、60秒ドカン！（スコアアタック）、ボスパレード（3連戦）
+- **オリジナルの色ぬり機構**：移動した地面がカラーに変化。色をためてカラーストームを発動
+- **気持ちよさの演出**：コンボ、フィーバー、ヒット演出、ダメージ数字、効果音、画面シェイク
+- **レベルアップで選ぶ12種類の能力**、恒久強化5種類、コスチューム6色、実績8種類
+- **スマホ・PC対応**。外部素材・広告・課金・ユーザー登録・オンライン対戦なし
+
+## Windowsで起動
 
 ```powershell
 py -m pip install -r requirements.txt
 py -m uvicorn main:app --host 127.0.0.1 --port 8000
 ```
 
-http://127.0.0.1:8000 を開く。前Ver.1.0が起動している場合はCtrl+Cで停止する。
+ブラウザで http://127.0.0.1:8000/ を開きます。すでにVer.2.0を起動中の場合は、PowerShell で Ctrl+C を押して終了してください。
 
 ## 操作
 
-- PC: WASDまたは矢印で移動 / Spaceでダッシュ / Eでスペシャル
-- スマホ: 左スティックで移動 / 右側の2ボタンでアクション
-- 攻撃は自動。敵から落ちるスターで強化カードを選択。
+- PC：`WASD` / 矢印で移動、`Space` / `Shift` でダッシュ、`Q` / `C` で色切替、`F` / `E` でカラーストーム、`Esc` / `P` で一時停止
+- スマホ：左スティックで移動、右下のダッシュ・色かえ・ストームボタン
+- 攻撃は自動。近くの敵を狙います。
 
-## GitHubにアップロード
+## GitHubを更新してRenderに自動デプロイ
 
-1. GitHubで新しいpublicまたはprivateリポジトリ `domando-rush` を作成。
-2. ZIPを展開したフォルダの **中身** (`main.py`, `static/`, `requirements.txt`, `render.yaml`) をアップロード。
-3. `main` ブランチへコミット。
+公開済みのGitHub `ryota321ryota-lang/domando-rush` の `main` ブランチに、ZIPを**展開した中身をそのまま**アップロードしてコミットしてください。`main.py`、`requirements.txt`、`render.yaml`、`static/index.html` に加え、今回新しい `static/style.css` と `static/game.js` が必要です。前のファイルを上書きし、今回のファイルも追加してください。
 
-## Renderで公開
+既存の Render Web Service **`domando-rush`** に対して、GitHub自動デプロイが有効ならコミット後に再デプロイされます。既存サービスを削除したり、新しいサービスを作る必要はありません。
 
-Render Dashboard → New → Web Service → GitHub repo `domando-rush`。
+- Build: `pip install -r requirements.txt`
+- Start: `uvicorn main:app --host 0.0.0.0 --port $PORT`
+- 公開URL（既存）: https://domando-rush.onrender.com
+- Health: `/health`
 
-- Name: `domando-rush`
-- Runtime: Python
-- Build Command: `pip install -r requirements.txt`
-- Start Command: `uvicorn main:app --host 0.0.0.0 --port $PORT`
-- Health Check Path: `/health`
+## セーブデータ
 
-`render.yaml` も付属（Blueprint方式でも使用可）。既存の同名サービスがある場合は別名を使用。Renderの起動と無料プラン条件はアカウントによって異なるため、公開の際に確認すること。
-
-## 備考
-
-完全ソロゲーム。スコアは各ブラウザのlocalStorageにのみ保存。ユーザー登録・友達対戦・オンライン同期・外部画像素材なし。音声は操作後に有効。
+コインや育成等はブラウザの `localStorage` に保存され、**同じブラウザ・同じ端末でのみ**継続されます。機種変更・別ブラウザ・シークレットモードでは共有されません。Ver.2.0のベストスコアが同じブラウザに保存されていれば、最初の起動時に冒険モードの記録へ引き継ぎます。コイン・育成などはVer.3.0から開始します。実際のお金を使う課金やガチャはありません。
