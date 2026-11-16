@@ -1,4 +1,4 @@
-/* DOMANDO RUSH: WORLD FESTIVAL v6.0 — original characters, art and gameplay.
+/* DOMANDO RUSH: DREAM ARCADE v7.0 — original characters, art and gameplay.
    Single-player, browser-only save, no external assets or libraries. */
 (()=>{'use strict';
 const cvs=document.getElementById('game'), g=cvs.getContext('2d');
@@ -698,6 +698,123 @@ if(scene==='town'){
  if(scene==='puzzle'&&!game.complete){const col=Math.floor((x-205)/79),row=Math.floor((y-153)/69);if(col>=0&&col<7&&row>=0&&row<5&&x<=205+col*79+68&&y<=153+row*69+62){puzzleTurn(row*7+col);return}}});
 const touch=document.getElementById('touch');function adjustTouch(){const yes=['town','cave','platform','survivor'].includes(scene);touch.classList.toggle('show',yes);document.getElementById('actA').textContent=scene==='platform'?'ジャンプ':scene==='survivor'?'ストーム':'調べる';document.getElementById('actB').textContent=scene==='platform'?'ダッシュ':scene==='survivor'?'ダッシュ':'走る'}
 document.querySelectorAll('[data-key]').forEach(b=>{const k=b.dataset.key;b.addEventListener('pointerdown',e=>{e.preventDefault();b.setPointerCapture(e.pointerId);keyHeld.add(k);b.classList.add('pressed');handlePress(k)});const release=()=>{keyHeld.delete(k);b.classList.remove('pressed')};b.addEventListener('pointerup',release);b.addEventListener('pointercancel',release);b.addEventListener('lostpointercapture',release)});
+
+/* ---------------------- VER.7 VISUAL / UX POLISH ---------------------- */
+const V7Names={survivor:'虹嵐バトル',platform:'スカイジャンプ',rpg:'ムーンナイトRPG',puzzle:'キラピカ工房'};
+const V7Tag={survivor:'みんなでワイワイ敵をふきとばせ！',platform:'ジャンプとダッシュで空の道を進め！',rpg:'読みあいバトルでボスをやっつけよう！',puzzle:'光をつないで宝石をキラキラ点灯！'};
+const V7CardColors={survivor:['#2b9b81','#154b5b'],platform:['#5b91d2','#314f8d'],rpg:['#a170bb','#4a3c72'],puzzle:['#d39d56','#7e574d']};
+function v7SoftPanel(x,y,w,h,a,b,r=22){v6Gradient(x,y,w,h,a,b,r);strokeRect(x,y,w,h,'#fff6d4',2,r)}
+function v7Glow(x,y,r,c){g.save();const gd=g.createRadialGradient(x,y,2,x,y,r);gd.addColorStop(0,c.replace(')',',0.95)').replace('rgb','rgba'));gd.addColorStop(1,'rgba(255,255,255,0)');g.fillStyle=gd;g.fillRect(x-r,y-r,r*2,r*2);g.restore()}
+function v7MascotFace(x,y,c1,c2,s=1){g.save();g.translate(x,y);g.scale(s,s);oval(0,18,28,8,'#00000024');circle(0,0,24,c1);circle(-8,-5,5,'#fff');circle(8,-5,5,'#fff');circle(-8,-5,2.2,'#2d3342');circle(8,-5,2.2,'#2d3342');oval(0,4,6,4,c2);line(-8,13,-3,18,'#ffffffaa',2);line(8,13,3,18,'#ffffffaa',2);g.restore()}
+function v7ModePoster(mode,x,y,w,h,selected){
+ const C=V7CardColors[mode]||['#678','#345'];
+ g.save();
+ v6Gradient(x,y,w,h,C[0],C[1],20);
+ g.beginPath();
+ roundRectPath(x,y,w,h,20); g.clip();
+ for(let i=0;i<7;i++){circle(x+35+i*58,y+24+(i%2)*14,48,'#ffffff0f')}
+ if(mode==='survivor'){
+   for(let i=0;i<7;i++)drawWorldTree(x+42+i*48,y+h-16,2,0.34+(i%3)*0.04);
+   circle(x+w-64,y+34,18,'#ffd773');
+   for(let i=0;i<5;i++)monster(x+122+i*34,y+94+(i%2)*11,12+(i%3),i%4,0);
+   hero(x+82,y+104,0.82,'#de7b85',true);
+   for(let i=0;i<3;i++){star(x+180+i*30,y+56+i*6,8,'#fff6a8');}
+ }
+ if(mode==='platform'){
+   for(let i=0;i<4;i++)cloud(x+45+i*82,y+28+(i%2)*12,.55);
+   hill(x+8,y+h+4,122,'#86c0a4'); hill(x+120,y+h+12,142,'#99d0b0'); hill(x+250,y+h+8,152,'#7bb1aa');
+   rect(x+56,y+104,122,18,'#7f6a74',9); rect(x+56,y+104,122,7,'#6ec18c',4);
+   rect(x+206,y+86,92,18,'#7f6a74',9); rect(x+206,y+86,92,7,'#6ec18c',4);
+   hero(x+92,y+84,0.74,'#6c9ed4',true); star(x+246,y+58,13,'#ffe29e');
+ }
+ if(mode==='rpg'){
+   circle(x+w-60,y+40,22,'#f5e2b1');
+   rect(x+242,y+42,90,88,'#e1d6de',8); poly([[x+232,y+48],[x+286,y+6],[x+341,y+48]],'#8e6ba6');
+   hero(x+76,y+104,0.82,'#c36f8b',true); monster(x+160,y+99,24,3,0);
+   rect(x+34,y+118,144,9,'#ffffff40',4); rect(x+34,y+118,100,9,'#f3a0b2',4);
+ }
+ if(mode==='puzzle'){
+   rect(x+48,y+40,296,78,'#f3ecd9',18);
+   for(let gy=0;gy<2;gy++)for(let gx=0;gx<4;gx++){
+     let px=x+66+gx*62,py=y+54+gy*30; rect(px,py,38,22,'#d8e4e7',7); circle(px+19,py+11,7,(gx+gy)%2?'#8db7bd':'#e5b783');
+     line(px+19,py+11,px+19+((gx%2)?10:-10),py+11,'#6a8ba0',5);
+   }
+   star(x+308,y+79,12,'#ffe080'); star(x+238,y+49,9,'#d2c2f3');
+   v7MascotFace(x+86,y+92,'#7fd4dd','#f4d06f',0.55);
+ }
+ if(selected){strokeRect(x+4,y+4,w-8,h-8,'#ffe39a',4,18)}
+ g.restore();
+}
+function v7HUDGem(x,y,c){circle(x,y,8,c);circle(x,y,3,'#fff8db')}
+function drawWorldHUD(){
+ rect(10,9,940,86,'#14324ae8',18); strokeRect(10,9,940,86,'#efd7a0',3,18);
+ text('DOMANDO RUSH',28,34,28,'#ffe9b0'); text('VER 7.0  •  DREAM ARCADE',31,63,13,'#d6ece7');
+ v7HUDGem(227,29,'#81e2cc'); v7HUDGem(247,29,'#ffd977'); v7HUDGem(267,29,'#d2c1ff');
+ v6Pill(730,18,157,46,`🪙 ${fmt(save.coins)}`,'#274c61');
+ clickButton(510,18,152,43,'ゲームを選ぶ Q',v6Selection,{bg:'#ffe09d',fg:'#384556',font:16,stroke:2});
+ clickButton(690,18,102,43,'地図 M',()=>{scene='atlas';adjustTouch()},{bg:'#e5efdf',font:15,stroke:1});
+ clickButton(893,18,47,43,volume?'♪':'×',()=>{volume=!volume;save.sound=volume;persist()},{bg:'#d8e3f0',font:18,stroke:1});
+ let near=nearestInteract();
+ if(near){rect(289,488,384,58,'#f7e7c3',15);strokeRect(289,488,384,58,'#b08f61',2,15);v6ClipText(`${near.icon||'★'}  ${near.name}  •  Eでアクション`,480,520,350,18,'#304b5a','center')}
+ rect(16,548,406,36,'#18384eca',12); text('WASD移動   E調べる   Qゲーム   M地図   J記録',31,571,13,'#edf5ef');
+ rect(760,548,181,36,'#18384eca',12); v6ClipText(worldArea,850,570,160,14,'#ffe8b2','center');
+ const todo=gates.filter(z=>!save.world.found.includes(z.id)).sort((a,b)=>Math.hypot(a.x-town.x,a.y-town.y)-Math.hypot(b.x-town.x,b.y-town.y))[0];
+ if(todo){const ang=Math.atan2(todo.y-town.y,todo.x-town.x);circle(62,139,31,'#173e54e0');circle(62,139,18,'#f6d98d');g.save();g.translate(62,139);g.rotate(ang+Math.PI/2);poly([[0,-13],[-10,8],[0,2],[10,8]],'#365671');g.restore();text('NEXT',62,173,11,'#ffe7b7','center')}
+}
+function v6DrawSelection(){drawWorld(0);buttons=[];rect(0,0,960,600,'#0f2238da');v6Gradient(32,20,896,560,'#213c59','#13263a',28);strokeRect(32,20,896,560,'#efd4a1',3,28);
+ text('わくわくゲームセレクト',66,67,30,'#ffe7ad');text('人気ゲームの遊びやすさを参考にした、4つのオリジナル冒険！',67,99,14,'#d2ebe7');
+ clickButton(825,43,79,34,'戻る',navBack,{bg:'#ece1cb',font:14});
+ const keys=['survivor','platform','rpg','puzzle'];
+ keys.forEach((k,i)=>{let x=64+(i%2)*416,y=126+Math.floor(i/2)*177;let s=Math.max(...v6Records(k)); v7ModePoster(k,x,y,390,158,k===V6.selected); text(V7Names[k],x+18,y+27,24,'#fff7dd'); text(V6Categories[k],x+18,y+50,11,'#eef6ee'); text(V7Tag[k],x+18,y+135,14,'#fff6dc'); text(s?'★'.repeat(s)+'☆'.repeat(3-s):'はじめてあそぶ',x+18,y+114,14,'#fff2a2'); });
+ keys.forEach((k,i)=>{let x=64+(i%2)*416,y=126+Math.floor(i/2)*177; clickButton(x+248,y+108,122,36,k===V6.selected?'選択中':'このゲーム',()=>{V6.selected=k;beep(460,.08)},{bg:V6.selected===k?'#ffd98c':'#f5e6ca',font:14,stroke:1});});
+ v7SoftPanel(61,494,806,60,'#10233cde','#173349de',16); text(`選択中：${V7Names[V6.selected]}　　${V7Tag[V6.selected]}`,82,518,17,'#ffe7a4');
+ ['やさしい','ふつう','むずかしい'].forEach((a,i)=>clickButton(86+i*120,534,110,28,a,()=>v6SelectDifficulty(i),{bg:V6.level===i?'#ffd98a':'#d7e7e8',fg:'#24384b',font:13,radius:9,stroke:1}));
+ clickButton(602,510,236,38,'▶ このゲームで遊ぶ',()=>start(V6.selected),{bg:'#ffdd91',font:18});
+ clickButton(602,551,236,24,'J 記録 / 工房で強化もできる',()=>{scene='journal';adjustTouch()},{bg:'#d9e9ea',font:12});
+}
+function drawSurvivor(){const s=game,p=s.p,cx=clamp(p.x-480,0,840),cy=clamp(p.y-300,0,700);g.fillStyle='#abd89b';g.fillRect(0,0,960,600); const sky=g.createLinearGradient(0,0,0,600); sky.addColorStop(0,'#a7e2d6'); sky.addColorStop(.7,'#bfe79d'); sky.addColorStop(1,'#98d178'); g.fillStyle=sky; g.fillRect(0,0,960,600);
+ g.save();g.translate(-cx,-cy); rect(0,0,1800,1300,'#a5d88f'); for(let i=0;i<42;i++){circle((i*140)%1800,80+(i*73)%1150,4,'#f6efb422')} for(let i=0;i<64;i++){let x=(i*273)%1800,y=(i*177)%1300;if(Math.abs(x-p.x)>90||Math.abs(y-p.y)>90)drawWorldTree(x,y,2,.48+((i%3)*.07))}
+ for(let i=0;i<48;i++){let bx=(i*119)%1770,by=120+(i*157)%1120; if(Math.abs(bx-p.x)>120||Math.abs(by-p.y)>120){circle(bx,by,4,i%3===0?'#f9c481':i%3===1?'#fff1a8':'#c7a5ff');line(bx,by,bx,by+12,'#6ca36d',2)}}
+ for(const t of s.trail){g.globalAlpha=.2*t.t;circle(t.x,t.y,20,'#fff2aa');}g.globalAlpha=1;
+ for(const d of s.drops){circle(d.x,d.y,12,'#ffe99c');star(d.x,d.y,8,'#fff')}
+ for(const b of s.shots){circle(b.x,b.y,12,'#fff4b790');circle(b.x,b.y,6,'#fff7ec')}
+ for(const e of s.enemies){if(e.kind===4){oval(e.x,e.y+47,62,14,'#304c4b77');circle(e.x,e.y,e.r,e.hit?'#fff5e9':'#b480b7');for(let i=0;i<7;i++){let a=i*TAU/7+tick*.008;circle(e.x+Math.cos(a)*50,e.y+Math.sin(a)*50,13,'#e6b7dc')}circle(e.x-18,e.y-11,8,'#433f65');circle(e.x+20,e.y-11,8,'#433f65');v6Bar(e.x-76,e.y-83,152,10,e.hp/e.max,'#382f59','#ffbad1');}else monster(e.x,e.y,e.r,e.kind,e.hit)}
+ for(let i=0;i<s.orbit;i++){let a=s.seconds*2.9+i*TAU/s.orbit,xx=p.x+Math.cos(a)*82,yy=p.y+Math.sin(a)*82;circle(xx,yy,16,'#d7ecff88');star(xx,yy,10,'#fff3ab')}
+ if(s.blast>0){g.strokeStyle='#fdf4b8';g.lineWidth=13*s.blast;g.beginPath();g.arc(p.x,p.y,166+s.pulse*22+(1-s.blast)*310,0,TAU);g.stroke()}
+ hero(p.x,p.y,1.08,'#df737d',true); g.restore();
+ v7SoftPanel(12,10,936,98,'#173f52f0','#17344ce9',16); text('🌿 虹嵐バトル',30,36,28,'#ffe7ad'); text(`Lv.${s.lvl}  討伐 ${s.kills}  COMBO ${s.combo}  SCORE ${fmt(s.score)}`,31,73,16,'#f7fff0'); text(`残り ${Math.max(0,Math.ceil(s.duration-s.seconds))}秒`,786,37,22,'#fff1c7','center'); v6Bar(715,67,165,15,p.hp/p.max,'#354657','#72dca6'); text(`HP ${Math.ceil(p.hp)}/${p.max}`,798,90,12,'#ebfaec','center');
+ v7SoftPanel(12,529,297,58,'#234c53e0','#183644e8',14); text(`EXP ${s.xp}/${s.xpGoal}`,28,548,14,'#ffefad'); v6Bar(30,570,262,9,s.xp/s.xpGoal,'#334552','#ffcf74');
+ v7SoftPanel(320,529,308,58,'#284c67db','#233957e0',14); text(s.ink>=100?'Space：カラーストーム！':`虹ゲージ ${Math.floor(s.ink)}%`,336,550,15,'#fff1c2'); v6Bar(336,570,274,9,s.ink/100,'#344c68','#ffe07d');
+ v7SoftPanel(639,529,298,58,'#304363df','#25334de8',14); text(`Shift ダッシュ ${p.cool?'あと'+p.cool.toFixed(1)+'秒':'READY'}`,652,549,16,'#e6f2f6'); text(`成長：星の輪 ${s.orbit} / 波紋 ${s.pulse}`,651,572,13,'#dce9ef');
+ if(s.choice){rect(0,0,960,600,'#10263fc8');v6Gradient(172,103,616,401,'#fbf1d6','#dddbe6',22);strokeRect(172,103,616,401,'#d8ad7d',4,22);text('LEVEL UP!  新しい力を選ぼう',480,152,26,'#324158','center');text('わかりやすい説明つき。好きな強化をえらぼう！',480,184,15,'#607080','center');s.choices.forEach((b,i)=>{let y=212+i*82;clickButton(205,y,549,65,`${i+1}   ${b[1]}  —  ${b[2]}`,()=>survivorUpgrade(i),{bg:['#ffdfb5','#d4eddf','#eee1f7'][i],font:18})});}}
+function drawPlatform(){const s=game,p=s.p,cx=camera; const sky=g.createLinearGradient(0,0,0,600); sky.addColorStop(0,['#71bee1','#94a0d8','#edaf96'][s.stage]); sky.addColorStop(.55,'#d7f3ee'); sky.addColorStop(1,'#f7e8c2'); g.fillStyle=sky; g.fillRect(0,0,960,600); circle(830,92,50,'#ffe6a9'); for(let i=0;i<11;i++){let x=((i*231-cx*.2)%1280+1280)%1280;cloud(x-50,88+i%3*36,.82)}
+ for(let i=0;i<7;i++){let x=((i*360-cx*.33)%1400+1400)%1400; hill(x,520,290,i%2?'#85bcae':'#a3d0b6');}
+ g.save(); g.translate(-cx,0); for(const a of s.solids){rect(a.x,a.y,a.w,a.h,a.h>40?'#8b765d':'#785e68',a.h>40?2:10);rect(a.x,a.y,a.w,12,'#67bc86',4);rect(a.x,a.y+10,a.w,9,'#acd99b',4);if(a.h>40)for(let i=0;i<a.w;i+=34){line(a.x+i+10,a.y+24,a.x+i+14,a.y+38,'#d9b28d74',2)}}
+ for(let i=0;i<10;i++){let tx=260+i*265; drawWorldPine(tx,508,.5); if(i%2===0)drawWorldPine(tx+85,506,.4)}
+ for(const c of s.collect)if(!c.got){circle(c.x,c.y,24,'#fff1bc55');star(c.x,c.y,14,'#ffe18d')}
+ for(const e of s.enemies){monster(e.x,484,19,1,0); if((tick+e.x)%30<15)star(e.x-2,454,5,'#ffd694')}
+ for(const x of s.checkpoints){rect(x,444,7,65,'#4b6476',2);poly([[x,439],[x+44,451],[x,464]],s.respawn>=x?'#8af0ca':'#e6bd89')}
+ rect(s.finish,390,9,120,'#486070',2); poly([[s.finish+9,390],[s.finish+79,408],[s.finish+9,427]],'#ffda8f'); text('GOAL',s.finish+44,419,13,'#3f5367','center'); hero(p.x,p.y+4,1.0,'#6e9eda',true); g.restore();
+ v7SoftPanel(12,10,936,90,'#173f52f0','#17344ce9',16); text('☁ スカイジャンプ',28,36,27,'#ffe7ad'); text(`チェック ${s.lastCheckpoint?1+game.checkpoints.filter(v=>v<=s.lastCheckpoint).length:0}  星 ${s.stars}  ミス ${s.falls}  SCORE ${fmt(s.score)}`,31,72,16,'#f8fff2'); text(`HP ${s.hp}`,778,37,22,'#fff0c6','center'); text(`TIME ${Math.floor(s.seconds)}秒`,883,37,19,'#fff0c6','center');
+ v7SoftPanel(22,538,335,42,'#204c5fd7','#1a3649df',12); text('Aボタン/Spaceでジャンプ　B/Shiftでダッシュ',36,563,14,'#eef6ee');
+ v7SoftPanel(618,536,320,44,'#294865d7','#1f3448df',12); text(`ゴールまで ${(Math.max(0,s.finish-p.x)/10|0)}m`,638,562,16,'#fff0c0');}
+function drawRPG(){const s=game,f=R6Foes[s.wave]; const sky=grad(0,600,'#667099','#213a57'); g.fillStyle=sky; g.fillRect(0,0,960,600); circle(792,94,52,'#ffe8b0aa'); for(let i=0;i<6;i++){rect(80+i*145,180+(i%2)*8,36,220,'#ffffff2a',5); rect(70+i*145,160+(i%2)*8,56,25,'#efe6d666',4);} poly([[0,358],[220,299],[480,336],[727,280],[960,346],[960,600],[0,600]],'#536c8a88'); rect(0,387,960,213,'#e8dace'); for(let i=0;i<12;i++)line(i*102,390,i*91,600,'#bcaeb7',1.4);
+ oval(696,373,118,26,'#34465b4d'); circle(690,259,99,'#ffffff57'); monster(689,269,s.wave===2?76:64,f.kind,0); if(s.shield>0){g.strokeStyle='#f5e0ae';g.lineWidth=5;g.beginPath();g.arc(690,267,97,Math.PI*.2,Math.PI*1.93);g.stroke()} hero(238,381,1.6,'#be6680'); hero(124,398,1.05,'#70b0a5');
+ v7SoftPanel(12,12,936,95,'#263d59f5','#203855f2',16); text(`☾ ムーンナイトRPG　第 ${s.wave+1}/3 章`,28,39,26,'#ffe7ad'); text(f.name,30,76,17,'#e8edf2'); v6Bar(531,31,290,18,s.enemyHp/s.enemyMax,'#3e445b','#f2a0b2'); text(`HP ${Math.ceil(s.enemyHp)} / ${s.enemyMax}`,690,71,16,'#fff1e4','center');
+ rect(508,124,416,67,'#2d4862e5',13); text(`つぎの敵行動：${R6Intents[s.intent%4][1]}`,529,149,20,'#fff2c5'); text(`敵の結界 ${s.shield}/${s.shieldMax}  •  BREAKで動きを止めよう`,528,173,13,'#dfebee');
+ v7SoftPanel(10,414,942,178,'#1c354df7','#28374cf8',18); text(`❤ ${s.hp}/${s.max}`,30,442,23,'#ffdfd1'); text(`✦ 集中 ${s.energy}/5`,250,442,19,'#fae9ae'); text(`BREAK連携 ×${s.combo}`,322,528,14,'#b8f4e1'); text(s.history[0],30,474,16,'#fff5da'); text(s.history[1]||'相手の動きを読んでコマンドを選ぼう',30,500,13,'#cee1eb');
+ if(!s.between){[['1 星剣　+1集中',0],['2 魔法　−2集中',1],['3 回復　−2集中',2],['4 防御　+2集中',3]].forEach(([label,n],i)=>clickButton(521+(i%2)*210,432+Math.floor(i/2)*68,200,52,label,()=>rpgMove(n),{bg:['#f6dfb1','#d6d7f8','#bfe5da','#d9e4f4'][i],font:15}));}
+ else{rect(0,0,960,600,'#172d49a2');panel(203,156,553,266,s.wave===2?'👑 全章クリア！':'✨ 章クリア！');text(`${f.name}を突破した！`,481,245,21,'#41526c','center');clickButton(322,317,315,64,s.wave===2?'★ 冒険を終える':'▶ 次の章へ',nextRPG,{bg:'#ffe19c',font:20});}}
+function drawPuzzle(){const s=game;g.fillStyle=grad(0,600,'#90afc5','#efe2bb');g.fillRect(0,0,960,600); for(let i=0;i<22;i++)circle((i*157)%960,80+(i*113)%510,15,'#ffffea22'); rect(0,456,960,144,'#d5b89255');
+ v7SoftPanel(13,11,935,96,'#263d58f1','#244d60f1',16); text('◈ キラピカ工房',29,38,26,'#ffe4ae'); text(`設計図 ${s.stage+1}/8   •   回転 ${s.rotations}   •   ★${s.stars}   •   SCORE ${fmt(s.score)}`,31,80,15,'#f5f4e8');
+ v7SoftPanel(161,125,636,391,'#4d687d','#3b526f',18); rect(173,137,611,367,'#f3e8d0',14);
+ for(let i=0;i<35;i++){const t=s.grid[i],x=205+t.x*79,y=151+t.y*69,hot=s.charged.has(i);v6Gradient(x,y,68,62,hot?'#dbf9df':'#fffbec',hot?'#a9ded0':'#e5ddcd',10);strokeRect(x,y,68,62,hot?'#54ae93':'#b8b3ac',2,10);circle(x+34,y+31,25,hot?'#97dac4':'#cdd4d9');for(const d of actualPorts(t)){const xx=x+34+directions[d][0]*25,yy=y+31+directions[d][1]*24;line(x+34,y+31,xx,yy,hot?'#239b88':'#66879e',12);circle(xx,yy,6,hot?'#fef1b0':'#87a7ba')}circle(x+34,y+31,9,hot?'#ffeeba':'#94b0bc');if(t.gem)star(x+34,y+31,10,hot?'#ffe079':'#afb1d3');if(t.x===0&&t.y===2)v6Pill(x+2,y+47,64,16,'START','#f3c982','#324860');if(t.x===6&&t.y===2)v6Pill(x+2,y+47,64,16,'GOAL','#c5abd9','#243d57')}
+ v7MascotFace(92,189,'#7fd4dd','#f4d06f',0.85); v7MascotFace(875,189,'#f5c885','#d18cc3',0.85);
+ text('クリックで回転。START → ★2個 → GOAL をつなごう',480,540,16,'#284c61','center');clickButton(15,531,135,48,'↶ 取り消す',puzzleUndo,{bg:'#f8e1b6',font:16});clickButton(811,531,134,48,'💡 ヒント',puzzleHint,{bg:'#f3e2b3',font:15});
+ if(s.complete){rect(0,0,960,600,'#192c4c9a');panel(191,137,576,315,'✨ 回路クリア！');text(`設計図 ${s.stage+1}/8 を完成した！`,480,237,25,'#445671','center');text(`今の回転数 ${s.rotations}   獲得評価 ★${s.rotations<=V6Routes[s.stage].length*1.85?3:2}`,480,290,18,'#647285','center');clickButton(326,345,312,62,s.stage===7?'🏆 全設計図を完成！':'▶ 次の設計図へ',puzzleNext,{bg:'#ffe0a0',font:19});}}
+function drawResult(){drawWorld(0);buttons=[];rect(0,0,960,600,'#142742cc');v6Gradient(146,58,668,491,'#fdf0d5','#d8e5e7',24);strokeRect(146,58,668,491,'#e5bd87',4,24); text(result.won?'QUEST COMPLETE!':'NICE TRY!',480,119,31,'#375164','center'); text(V7Names[result.name]||V6Names[result.name]||names[result.name],480,159,24,'#646277','center'); text((result.won?'★'.repeat(Math.max(1,result.stars)):'☆')+(result.won?'☆'.repeat(Math.max(0,3-result.stars)):'☆☆'),480,214,35,'#dba550','center'); rect(199,240,559,156,'#ffffffb9',15); text(`スコア  ${fmt(result.score)}`,480,284,28,'#384e64','center'); text(`獲得コイン  +${fmt(result.reward)}`,480,336,22,'#bc8546','center'); v6ClipText(result.details,480,379,516,15,'#637489','center'); text(`BEST ${fmt(save.records[result.name])}  •  難易度 ${['やさしい','ふつう','むずかしい'][result.level]||['のんびり','冒険','達人'][result.level]}`,480,427,16,'#5d6a7b','center'); clickButton(187,458,258,60,'◀ ワールドへ戻る',navBack,{bg:'#d8e5df',font:18}); clickButton(511,458,258,60,'▶ もう一度挑戦',()=>start(result.name),{bg:'#ffdb91',font:19});}
+function drawPaused(){rect(0,0,960,600,'#10253bbb');v6Gradient(260,155,442,308,'#fdf0d8','#dbe5de',16);strokeRect(260,155,442,308,'#debd89',3,16);text('Ⅱ PAUSE',480,205,28,'#344e66','center');text('休憩して、またすぐ遊べるよ',480,254,17,'#677283','center');clickButton(310,301,344,57,'▶ ゲームを再開',()=>paused=false,{bg:'#ffe0a4',font:20});clickButton(310,378,344,56,'◀ ワールドへ戻る',navBack,{bg:'#d4e8e7',font:18});}
+
 // Browser-console debug API for automated regression verification.
 if(['localhost','127.0.0.1',''].includes(location.hostname))window.DOMANDO_RUSH_DEBUG={start,back:navBack,worldTeleport:(x,y)=>{town.x=clamp(x,50,WORLD_W-50);town.y=clamp(y,50,WORLD_H-50);scene='town';save.firstVisit=false;adjustTouch();},worldExplore:()=>({...town,region:worldArea,chests:save.world.chests,found:save.world.found}),worldTileCodes:()=>[...worldTiles],interact:worldInteract,atlas:()=>{scene='atlas';adjustTouch()},getState:()=>({scene,difficulty:V6.level,paused,coins:save.coins,record:save.records[mode],mode,world:{x:town.x,y:town.y,area:worldArea},game:game?JSON.parse(JSON.stringify({...game,charged:undefined})):null}),puzzleSolve:()=>{if(scene!=='puzzle')start('puzzle');game.grid.forEach(t=>t.rot=0);updateCircuit();},select:()=>v6Selection(),setDifficulty:n=>v6SelectDifficulty(n),finish:()=>{if(game)winGame(true,game.score||1000,'テストクリア')},nextPuzzle:puzzleNext,act:rpgMove,skipPlatform:()=>{if(scene==='platform')game.p.x=3260},skipSurvivor:()=>{if(scene==='survivor')game.seconds=95},setCoins:n=>{save.coins=n;persist();},save:()=>({...save})};
 adjustTouch();requestAnimationFrame(frame);

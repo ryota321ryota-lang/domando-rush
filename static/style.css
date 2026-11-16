@@ -25,3 +25,12 @@ canvas{display:block;width:100%;height:100%;touch-action:none;user-select:none;i
 }
 @media(max-height:550px) and (pointer:coarse){.pad{transform:scale(.78);transform-origin:bottom left;bottom:7px;left:8px}.action-pad{transform:scale(.78);transform-origin:bottom right;bottom:7px;right:8px}}
 @media(prefers-reduced-motion:reduce){#notice{transition:none}}
+
+
+/* Ver7 polish */
+body{background:radial-gradient(circle at top,#1a3450 0%,#112133 62%,#0c1726 100%)}
+#stage{background:linear-gradient(180deg,#9ec8c5 0%,#77b38f 58%,#5a8d6b 100%)}
+#touch button{border-color:#fff5c8;background:linear-gradient(180deg,#345e7a,#203f56);box-shadow:0 4px 0 #102536,0 10px 24px #11203166}
+.action-pad button{background:linear-gradient(180deg,#cf7a68,#a34d43)!important}
+.action-pad button:first-child{background:linear-gradient(180deg,#668dbe,#3e638f)!important}
+#notice{background:linear-gradient(180deg,#244660f2,#193244ef)}
