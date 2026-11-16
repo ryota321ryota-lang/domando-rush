@@ -1,50 +1,76 @@
-# DOMANDO RUSH Ver.4.0 — FOUR ROADS
+# DOMANDO RUSH Ver.5.0 — LUMINOUS ATLAS
 
-**4 genres in one original game.** Python/FastAPI serves one browser game; no account, third-party assets, multiplayer, microtransactions or ads. PC / phone, local progress.
+**本当に歩いて探検する、完全オリジナルの一人用Webゲーム。**
 
-## Adventure hub
+「4つのゲームを並べたホーム」を廃止し、村から森、雲の連峰、神殿、湿原、海岸までつながった **4320×3024のスクロール式オープンワールド** に変更しました。オリジナルのキャラクター、地形、描画、NPC、BGM代わりの効果音を使用。既存の人気ゲームから *ジャンルの楽しさ* を参考にしていますが、その作品の画像・名前・音楽・マップをコピーしていません。
 
-A colorful RPG town you actually walk around. Choose one of four gateways, and visit the forge to buy persistent, optional character upgrades with coins earned by playing. Coins and records are stored in the current browser only. Version 3 coin balance is imported **once** when Version 4 is first opened on that browser (Version 3 data is left untouched).
+## 主な内容
 
-## Four playable games
+- **星灯の村**：鍛冶屋、宿屋、歴史家、村人に話しかける。案内表示はアプリ式のメニューではなく冒険世界の中にあります。
+- **広い世界**：カメラが主人公を追い、見えていない地域まで歩けます。森、高地、山道、川、橋、沼地、月影の高原、海岸、港、小島を探索できます。
+- **洞窟**：入口から実際に中へ入り、岩の間を歩き、隠された宝箱を見つけて地上へ戻れます。
+- **船**：潮鳴りの港から海を渡って小島に行き、戻ることができます。
+- **冒険の記録**：Mキーで世界地図、Jキーで4つの試練の発見・踏破状況を確認。4つの試練をすべて達成すると記録所で特別報酬を受け取れます。
+- **宝箱**：野外の8つの宝箱と洞窟の秘宝。初回のみコインを獲得できます。
+- **オートセーブ**：歩いた座標、発見した場所、宝箱、コイン、クリア記録と能力強化をブラウザ内に保存。
+- **過去版からの引き継ぎ**：同じブラウザに残っているVer.4.0のコイン・各モード記録・鍛冶屋の強化をVer.5.0に一度取り込み、Ver.4.0のデータは消しません。Ver.3.0しかない場合はコインなど一部を引き継ぎます。
+- **フル画面PC表示**：外周の額縁を廃止。スマホタッチ操作にも対応（スマホは横向き推奨）。
+- **外部画像・音源なし**：Canvasによるオリジナル描画とWeb Audioで演出。通信がない状況でも、一度キャッシュされたデータで動かせるPWAを用意。
 
-1. **そよかぜの森 — Prism Grove**: 95-second survival arena with automatic magic projectiles, chasing creatures, upgrades while playing, HP, dash and rainbow storm.
-2. **空跳びの塔 — Cloud Hop**: horizontal platforming course with gaps, floating platforms, collectibles, enemy collisions, checkpoints, sprint/dash and a goal.
-3. **月影の神殿 — Moon Temple**: three-stage turn-based RPG with four commands, focus points, telegraphed stronger enemy turns, healing, guarding and persistent HP.
-4. **虹の研究所 — Prism Lab**: six designed beam-routing puzzles; rotate pipes so the source connects to both gems and the end target. Undo, hints and staged challenges.
+## ワールド内の4つのゲーム
 
-The game mechanics, visual characters, code and names are original. General inspiration: classic JRPG exploration, side-scrolling platform games, wave-survival games and spatial logic puzzles. No third-party artwork or audio is embedded.
+1. **翠環の森**／サバイバーアクション：95秒間のサバイバル、オート攻撃、ストーム、レベルアップ。
+2. **天雲の塔**／ジャンプアクション：横スクロール、二段ジャンプ系強化、ダッシュ、星集め、チェックポイント。
+3. **月影の神殿**／コマンドRPG：攻撃・魔法・回復・防御のターン制3連戦。
+4. **虹晶の遺跡**／光の回路パズル：回転して宝石と出口をつなぐ6ステージ。
 
-## Windows local play
+※ 4モードはVer.4.0の実装を継承。ワールド内から起動し、終了後は元の場所に戻ります。
 
-In PowerShell inside the folder containing `main.py`:
+## 操作
+
+| 場所 | PC操作 | スマホ |
+|---|---|---|
+| ワールド | WASD / 矢印＝移動、Shift＝走る、E / Enter＝話す・入る | 画面の十字キー、A＝調べる、B＝走る |
+| 世界地図 | M、Escで閉じる | 画面右上の「地図 M」をタップ |
+| 冒険の記録 | J、Escで閉じる | 町の「旅の記録所」で開く |
+| 洞窟 | WASD / 矢印、E＝宝箱・出口 | 十字キーとA |
+| 森 | WASD / 矢印、Shift＝ダッシュ、Space / F＝ストーム | 十字キーとA / B |
+| 塔 | 左右移動、Space / 上＝ジャンプ、Shift＝ダッシュ | 十字キーとA / B |
+| 神殿 | 1～4キーまたは画面のボタンでコマンド選択 | コマンドをタップ |
+| 回路 | パネルをクリック、Z＝戻す、H＝ヒント | パネルと操作ボタンをタップ |
+
+## Windowsでローカル起動
+
+解凍して、**main.pyのあるフォルダ**でPowerShellを開きます。
 
 ```powershell
 py -m pip install -r requirements.txt
 py -m uvicorn main:app --host 127.0.0.1 --port 8000
 ```
 
-Then open `http://127.0.0.1:8000/`. To stop: `Ctrl+C`.
+ブラウザで `http://127.0.0.1:8000` を開きます。停止はPowerShellで `Ctrl + C`。
 
-## Browser controls
+## GitHub＋Renderで既存の公開版をVer.5.0にする
 
-- Town: WASD or arrow keys, E / Enter to enter nearby gates. Click/tap a building to enter directly.
-- Survival: WASD/arrow keys, automatic shots, Shift dash, Space or F rainbow storm; pick level-ups by clicking or 1/2/3.
-- Platforming: arrows/A/D move, Space/Up jump, Shift dash. Touch A/B supports mobile.
-- RPG: click a command or press 1–4, Enter for next encounter.
-- Puzzle: tap pipe tiles to rotate; Z undo, H hint, Enter proceed after solving.
-- Escape pauses and opens a resume/return option. Audio can be toggled in town.
+**Renderの新サービスは作らなくてOK。** 既存のGitHubリポジトリとRenderサービスを更新します。
 
-## Existing GitHub + Render deployment
+- GitHubリポジトリ：`https://github.com/ryota321ryota-lang/domando-rush`
+- GitHubアップロード：`https://github.com/ryota321ryota-lang/domando-rush/upload`
+- Renderサービス名：`domando-rush`
+- 公開URL：`https://domando-rush.onrender.com`
 
-Keep the same repository `ryota321ryota-lang/domando-rush` and Render service `domando-rush`; **do not create a second service**.
+**手順**：ZIPを展開 → `main.py` のあるフォルダの中身（`static`フォルダも含む）をGitHubにアップロード → **Commit changes** → Renderの自動デプロイを待ち、`Live`と表示されたら公開URLを開きます。`__pycache__` や `.pyc` はアップロードしません。過去の`static`フォルダを残したまま、同名のファイルを上書きする必要があります。
 
-1. Unzip Ver.4.0 and open the folder with `main.py`.
-2. Open `https://github.com/ryota321ryota-lang/domando-rush/upload` and drag the **contents** (including the `static` folder) to GitHub. Confirm overwrite/replace the old files, and click Commit changes.
-3. Render is configured to automatically deploy commits from the `main` branch.
-4. When status is Live, open `https://domando-rush.onrender.com`, force refresh (Ctrl+F5) if you see an old version.
+Render設定（既存のまま）：
 
-Build command: `pip install -r requirements.txt`
-Start command: `uvicorn main:app --host 0.0.0.0 --port $PORT`
+- Runtime: Python 3
+- Build Command: `pip install -r requirements.txt`
+- Start Command: `uvicorn main:app --host 0.0.0.0 --port $PORT`
+- Branch: `main`
+- Instance: Free
 
-**Note:** Free Render services may spin down after inactivity. There is no public leaderboard because the game is single-player, with local saves.
+### 備考
+
+本作は**一人用**で、ユーザー登録・課金・オンライン対戦はありません。コインや進行状況は個々のブラウザのlocalStorageに記録され、**端末間では同期されません**。ブラウザのデータを消すと記録が失われる場合があります。Renderの無料Webサービスは一定の無アクセス期間後にスリープする場合があります。ゲーム全体のデータはZIP内に含まれています。 
+
+実装・テスト：起動、静的ファイル取得、4つのモード起動、道の連結性、洞窟・船・宝箱、地図と冒険の記録、PCとスマホでの移動ボタン、ブラウザJavaScriptエラー検査。全端末や全ゲームをクリアする長時間の総合テストは未実施。

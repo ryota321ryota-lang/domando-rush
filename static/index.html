@@ -2,21 +2,25 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
-<meta name="theme-color" content="#243c58"><meta name="description" content="DOMANDO RUSH FOUR ROADS — RPGの町から4ジャンルの冒険へ出かける、オリジナルひとり用ゲーム">
-<title>DOMANDO RUSH 4.0 | FOUR ROADS</title>
-<link rel="stylesheet" href="/static/style.css?v=4.0.0">
+<meta name="theme-color" content="#1b3043"><meta name="description" content="DOMANDO RUSH LUMINOUS ATLAS — 山、森、海を歩いて旅するオリジナル冒険RPG。4ジャンルのゲームを収録。">
+<title>DOMANDO RUSH 5.0 | LUMINOUS ATLAS</title>
+<link rel="manifest" href="/static/manifest.webmanifest">
+<link rel="icon" href="/static/icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/static/style.css?v=5.0.0">
 </head>
 <body>
 <div id="shell">
-  <div id="stage"><canvas id="game" width="960" height="600" aria-label="ドマンド・ラッシュのゲーム画面"></canvas>
+  <div id="stage"><canvas id="game" width="960" height="600" aria-label="DOMANDO RUSH 5.0。キーボードか画面のボタンで冒険するゲーム"></canvas>
     <div id="notice" role="status" aria-live="polite"></div>
   </div>
+  <div id="orientation-hint">📱 横向きにすると、広い世界をもっと遊びやすく表示できます</div>
   <div id="touch" aria-label="スマホ操作ボタン">
-    <div class="pad" aria-label="移動キー"><button data-key="arrowup" class="up">▲</button><button data-key="arrowleft" class="left">◀</button><button data-key="arrowdown" class="down">▼</button><button data-key="arrowright" class="right">▶</button></div>
-    <div class="action-pad"><button id="button-b" data-key="shift">B <small id="actB">ダッシュ</small></button><button id="button-a" data-key=" ">A <small id="actA">決定</small></button></div>
+    <div class="pad" aria-label="移動キー"><button data-key="arrowup" class="up" aria-label="上に移動">▲</button><button data-key="arrowleft" class="left" aria-label="左に移動">◀</button><button data-key="arrowdown" class="down" aria-label="下に移動">▼</button><button data-key="arrowright" class="right" aria-label="右に移動">▶</button></div>
+    <div class="action-pad"><button id="button-b" data-key="shift">B <small id="actB">走る</small></button><button id="button-a" data-key=" ">A <small id="actA">調べる</small></button></div>
   </div>
 </div>
 <div id="error" hidden></div>
-<script src="/static/game.js?v=4.0.0" defer></script>
+<script src="/static/game.js?v=5.0.0" defer></script>
+<script>if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('/sw.js',{scope:'/'}).catch(()=>{}))}</script>
 </body>
 </html>
