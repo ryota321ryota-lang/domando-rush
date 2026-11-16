@@ -1,42 +1,50 @@
-# DOMANDO RUSH Ver.3.0 — COLOR STORM
+# DOMANDO RUSH Ver.4.0 — FOUR ROADS
 
-新しいオリジナルソロアクションゲーム。Ver.2.0 の GitHub + Render 構成をそのまま使えます。
+**4 genres in one original game.** Python/FastAPI serves one browser game; no account, third-party assets, multiplayer, microtransactions or ads. PC / phone, local progress.
 
-## このバージョンで追加したもの
+## Adventure hub
 
-- **ホーム**：モード選択、チャレンジ、獲得コイン・プレイヤーランク
-- **4つのゲームモード**：カラーストーリー（3ボス）、ぬりぬりバトル（180マスを塗る）、60秒ドカン！（スコアアタック）、ボスパレード（3連戦）
-- **オリジナルの色ぬり機構**：移動した地面がカラーに変化。色をためてカラーストームを発動
-- **気持ちよさの演出**：コンボ、フィーバー、ヒット演出、ダメージ数字、効果音、画面シェイク
-- **レベルアップで選ぶ12種類の能力**、恒久強化5種類、コスチューム6色、実績8種類
-- **スマホ・PC対応**。外部素材・広告・課金・ユーザー登録・オンライン対戦なし
+A colorful RPG town you actually walk around. Choose one of four gateways, and visit the forge to buy persistent, optional character upgrades with coins earned by playing. Coins and records are stored in the current browser only. Version 3 coin balance is imported **once** when Version 4 is first opened on that browser (Version 3 data is left untouched).
 
-## Windowsで起動
+## Four playable games
+
+1. **そよかぜの森 — Prism Grove**: 95-second survival arena with automatic magic projectiles, chasing creatures, upgrades while playing, HP, dash and rainbow storm.
+2. **空跳びの塔 — Cloud Hop**: horizontal platforming course with gaps, floating platforms, collectibles, enemy collisions, checkpoints, sprint/dash and a goal.
+3. **月影の神殿 — Moon Temple**: three-stage turn-based RPG with four commands, focus points, telegraphed stronger enemy turns, healing, guarding and persistent HP.
+4. **虹の研究所 — Prism Lab**: six designed beam-routing puzzles; rotate pipes so the source connects to both gems and the end target. Undo, hints and staged challenges.
+
+The game mechanics, visual characters, code and names are original. General inspiration: classic JRPG exploration, side-scrolling platform games, wave-survival games and spatial logic puzzles. No third-party artwork or audio is embedded.
+
+## Windows local play
+
+In PowerShell inside the folder containing `main.py`:
 
 ```powershell
 py -m pip install -r requirements.txt
 py -m uvicorn main:app --host 127.0.0.1 --port 8000
 ```
 
-ブラウザで http://127.0.0.1:8000/ を開きます。すでにVer.2.0を起動中の場合は、PowerShell で Ctrl+C を押して終了してください。
+Then open `http://127.0.0.1:8000/`. To stop: `Ctrl+C`.
 
-## 操作
+## Browser controls
 
-- PC：`WASD` / 矢印で移動、`Space` / `Shift` でダッシュ、`Q` / `C` で色切替、`F` / `E` でカラーストーム、`Esc` / `P` で一時停止
-- スマホ：左スティックで移動、右下のダッシュ・色かえ・ストームボタン
-- 攻撃は自動。近くの敵を狙います。
+- Town: WASD or arrow keys, E / Enter to enter nearby gates. Click/tap a building to enter directly.
+- Survival: WASD/arrow keys, automatic shots, Shift dash, Space or F rainbow storm; pick level-ups by clicking or 1/2/3.
+- Platforming: arrows/A/D move, Space/Up jump, Shift dash. Touch A/B supports mobile.
+- RPG: click a command or press 1–4, Enter for next encounter.
+- Puzzle: tap pipe tiles to rotate; Z undo, H hint, Enter proceed after solving.
+- Escape pauses and opens a resume/return option. Audio can be toggled in town.
 
-## GitHubを更新してRenderに自動デプロイ
+## Existing GitHub + Render deployment
 
-公開済みのGitHub `ryota321ryota-lang/domando-rush` の `main` ブランチに、ZIPを**展開した中身をそのまま**アップロードしてコミットしてください。`main.py`、`requirements.txt`、`render.yaml`、`static/index.html` に加え、今回新しい `static/style.css` と `static/game.js` が必要です。前のファイルを上書きし、今回のファイルも追加してください。
+Keep the same repository `ryota321ryota-lang/domando-rush` and Render service `domando-rush`; **do not create a second service**.
 
-既存の Render Web Service **`domando-rush`** に対して、GitHub自動デプロイが有効ならコミット後に再デプロイされます。既存サービスを削除したり、新しいサービスを作る必要はありません。
+1. Unzip Ver.4.0 and open the folder with `main.py`.
+2. Open `https://github.com/ryota321ryota-lang/domando-rush/upload` and drag the **contents** (including the `static` folder) to GitHub. Confirm overwrite/replace the old files, and click Commit changes.
+3. Render is configured to automatically deploy commits from the `main` branch.
+4. When status is Live, open `https://domando-rush.onrender.com`, force refresh (Ctrl+F5) if you see an old version.
 
-- Build: `pip install -r requirements.txt`
-- Start: `uvicorn main:app --host 0.0.0.0 --port $PORT`
-- 公開URL（既存）: https://domando-rush.onrender.com
-- Health: `/health`
+Build command: `pip install -r requirements.txt`
+Start command: `uvicorn main:app --host 0.0.0.0 --port $PORT`
 
-## セーブデータ
-
-コインや育成等はブラウザの `localStorage` に保存され、**同じブラウザ・同じ端末でのみ**継続されます。機種変更・別ブラウザ・シークレットモードでは共有されません。Ver.2.0のベストスコアが同じブラウザに保存されていれば、最初の起動時に冒険モードの記録へ引き継ぎます。コイン・育成などはVer.3.0から開始します。実際のお金を使う課金やガチャはありません。
+**Note:** Free Render services may spin down after inactivity. There is no public leaderboard because the game is single-player, with local saves.
