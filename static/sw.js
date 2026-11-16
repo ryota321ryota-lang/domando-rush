@@ -1,4 +1,4 @@
-const VERSION='domando-rush-5.0.0';const FILES=['/','/static/style.css?v=5.0.0','/static/game.js?v=5.0.0','/static/icon.svg','/static/icon-192.png','/static/icon-512.png'];
+const VERSION='domando-rush-6.0.0';const FILES=['/','/static/style.css?v=6.0.0','/static/game.js?v=6.0.0','/static/icon.svg','/static/icon-192.png','/static/icon-512.png'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(VERSION).then(c=>c.addAll(FILES)).then(()=>self.skipWaiting()))});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith('domando-rush-')&&k!==VERSION).map(k=>caches.delete(k)))).then(()=>self.clients.claim()))});
 self.addEventListener('fetch',e=>{if(e.request.method!=='GET'||new URL(e.request.url).origin!==self.location.origin)return;e.respondWith(fetch(e.request).then(r=>{if(r.ok){const copy=r.clone();caches.open(VERSION).then(c=>c.put(e.request,copy))}return r}).catch(()=>caches.match(e.request).then(r=>r||caches.match('/'))))});
